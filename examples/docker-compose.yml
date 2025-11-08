@@ -3,7 +3,7 @@ version: '2'
 services:
   
   cpuminer-app:
-    #image: sikkienl/cpuminer
+    image: sikkienl/cpuminer
     container_name: cpuminer-app
     environment:
       - HOSTNAME=cpuminer-app
