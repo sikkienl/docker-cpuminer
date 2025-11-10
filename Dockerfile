@@ -6,8 +6,9 @@ LABEL author="SikkieNL (@sikkienl)"
 RUN apt-get update -y && \
 	apt-get upgrade -y
 
-RUN apt-get install -y build-essential automake libssl-dev libcurl4-openssl-dev libjansson-dev libgmp-dev zlib1g-dev git gcc make && \
-  autoconf pkg-config
+RUN apt-get install -y build-essential automake libssl-dev libcurl4-openssl-dev libjansson-dev libgmp-dev zlib1g-dev git gcc make
+
+RUN apt-get install -y autoconf pkg-config
 
 ### Build CPU Miner			
 RUN git clone https://github.com/tpruvot/cpuminer-multi -b linux cpuminer && \
