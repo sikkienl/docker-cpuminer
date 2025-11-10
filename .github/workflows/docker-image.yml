@@ -27,3 +27,9 @@ jobs:
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+      - name: Run Docker build ${{ env.NAME }}:${{ env.VERSION }}
+        run: |
+#          docker build -t ${{ env.IMAGE_NAME }}:${{ env.VERSION }} .  
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
