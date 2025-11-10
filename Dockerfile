@@ -1,5 +1,5 @@
 #FROM alpine:latest
-FROM ubuntu:bionic
+FROM ubuntu:20.04
 MAINTAINER SikkieNL
 
 ### Set Environment Variables
@@ -7,15 +7,14 @@ MAINTAINER SikkieNL
 
 ### Install Dependencies
 #   RUN  adduser -S -D -H -h /mine mine && \
-  apt-get update && \
-    apt-get upgrade -y \
+  RUN apt-get update -y &&\
 		apt-get install -y \
+      build-essential \
 			automake \
 			autoconf \
 		  openssl-dev \
 			curl-dev \
 			git \
-			build-base && \
       libssl-dev \
       libcurl4-openssl-dev \
       libjansson-dev \
