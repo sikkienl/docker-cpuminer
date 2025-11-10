@@ -1,5 +1,5 @@
 #FROM alpine:latest
-FROM ubuntu: 18.04
+FROM ubuntu:bionic
 MAINTAINER SikkieNL
 
 ### Set Environment Variables
@@ -7,17 +7,15 @@ MAINTAINER SikkieNL
 
 ### Install Dependencies
 RUN apt-get update && \
-	apt-get install -y \
-    build-essential \
-		automake \
-		autoconf \
-		openssl-dev \
-		curl-dev \
-		git \
+	apt-get install -y
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+	bash git wget python3\
+    build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils \
     libssl-dev \
+    libgmp-dev \
     libcurl4-openssl-dev \
     libjansson-dev \
-    libgmp-dev \
     zlib1g-dev \
 
 ### Build CPU Miner			
