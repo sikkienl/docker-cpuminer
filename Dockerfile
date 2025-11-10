@@ -4,11 +4,11 @@ LABEL author="SikkieNL (@sikkienl)"
 
 ### Install Dependencies
 RUN apt-get update && \
-	apt-get upgrade -y
+	apt-get install -y software-properties-common && \
+  add-apt-repository ppa:bitcoin/bitcoin
 
 RUN apt-get install -y git \
     build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils \
-    libssl-dev \
     libgmp-dev \
     libcurl4-openssl-dev \
     libjansson-dev &&\
