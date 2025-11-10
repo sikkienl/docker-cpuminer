@@ -6,9 +6,10 @@ MAINTAINER SikkieNL
    ENV ENABLE_SMTP=FALSE
 
 ### Install Dependencies
-   RUN  adduser -S -D -H -h /mine mine && \
-    apk update && \
-		apk add \
+#   RUN  adduser -S -D -H -h /mine mine && \
+  apt-get update && \
+    apt-get upgrade -y \
+		apt-get install -y \
 			automake \
 			autoconf \
 		  openssl-dev \
@@ -29,17 +30,17 @@ MAINTAINER SikkieNL
 	make -j n && \
 
 ### Cleanup
-  apk del \
-    automake \
-    autoconf \
-    build-base \
-    git && \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    libjansson-dev \
-    libgmp-dev \
-    zlib1g-dev \
-    rm -rf /var/cache/apk/* /usr/src/*
+#  apk del \
+#    automake \
+#    autoconf \
+#    build-base \
+#    git && \
+#    libssl-dev \
+#    libcurl4-openssl-dev \
+#    libjansson-dev \
+#    libgmp-dev \
+#    zlib1g-dev \
+#    rm -rf /var/cache/apk/* /usr/src/*
 
 ### Add Files
    ADD install /
