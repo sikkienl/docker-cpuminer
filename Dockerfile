@@ -1,4 +1,5 @@
-FROM alpine:latest
+#FROM alpine:latest
+FROM ubuntu:bionic
 MAINTAINER SikkieNL
 
 ### Set Environment Variables
