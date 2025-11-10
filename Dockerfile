@@ -6,20 +6,19 @@ MAINTAINER SikkieNL
    ENV ENABLE_SMTP=FALSE
 
 ### Install Dependencies
-#   RUN  adduser -S -D -H -h /mine mine && \
-  RUN apt-get update -y &&\
-		apt-get install -y \
-      build-essential \
-			automake \
-			autoconf \
-		  openssl-dev \
-			curl-dev \
-			git \
-      libssl-dev \
-      libcurl4-openssl-dev \
-      libjansson-dev \
-      libgmp-dev \
-      zlib1g-dev \
+RUN apt-get update && \
+	apt-get install -y \
+    build-essential \
+		automake \
+		autoconf \
+		openssl-dev \
+		curl-dev \
+		git \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    libjansson-dev \
+    libgmp-dev \
+    zlib1g-dev \
 
 ### Build CPU Miner			
   git clone https://github.com/JayDDee/cpuminer-opt && \
