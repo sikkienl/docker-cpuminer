@@ -26,27 +26,15 @@ RUN apt-get install -y \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Build CPU Miner from scource code
-RUN git clone https://github.com/JayDDee/cpuminer-opt /tmp/cpuminer \
-  && cd /tmp/cpuminer \
+RUN git clone https://github.com/JayDDee/cpuminer-opt cpuminer \
+  && cd cpuminer \
   && git checkout "$VERSION_TAG" \
   && ./autogen.sh \
   && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
   && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
   && make install -j 4
 
-  # Clean-up
-RUN cd / && \
-apt-get purge --auto-remove -y \
-  autoconf \
-  automake \
-  curl \
-  g++ \
-  git \
-  make \
-  pkg-config \
-  && apt-get clean
-
-  # Verify
+# Verify
 RUN cpuminer --cputest && \
 cpuminer --version
 
