@@ -24,3 +24,4 @@ RUN git clone https://github.com/ghostlander/nsgminer && \
 ### Entrypoint Setup
 WORKDIR /nsgminer
 ENTRYPOINT	["./nsgminer"]
+CMD ["-h"]
