@@ -44,5 +44,5 @@ WORKDIR /cpuminer
 #EXPOSE 80
 #CMD ["cpuminer", "--config=config.json"]
 
-#ENTRYPOINT ["./cpuminer"]
-#CMD ["-h"]
+ENTRYPOINT ["./cpuminer"]
+CMD ["-h"]
