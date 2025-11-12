@@ -2,20 +2,24 @@ FROM ubuntu:bionic
 
 LABEL author="SikkieNL (@sikkienl)"
 
-### Install Dependencies
+# Runtime dependencies
 RUN apt-get update -y && \
 	apt-get upgrade -y
 
+# Install Dependencies
 RUN apt-get install -y \
-  build-essential \
   autoconf \
   automake \
+  build-essential \
+  curl \
+  g++ \
+  git \
   libtool \
   pkg-config \
   libcurl4-gnutls-dev \
 	uthash-dev \
   libncursesw5-dev \
-  git
+  make
 
 ### Build CPU Miner			
 RUN git clone https://github.com/ghostlander/nsgminer && \
@@ -23,5 +27,5 @@ RUN git clone https://github.com/ghostlander/nsgminer && \
 
 ### Entrypoint Setup
 WORKDIR /nsgminer
-ENTRYPOINT	["./nsgminer"]
-CMD ["-h"]
+#ENTRYPOINT	["./nsgminer"]
+CMD ["nsgminer"]
