@@ -39,7 +39,7 @@ RUN git clone https://github.com/JayDDee/cpuminer-opt cpuminer \
 #cpuminer --version
 
 ### Entrypoint Setup
-WORKDIR /cpuminer
+#WORKDIR /cpuminer
 #COPY config.json /cpuminer
 #EXPOSE 80
 #CMD ["cpuminer", "--config=config.json"]
