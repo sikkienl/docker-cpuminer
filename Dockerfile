@@ -24,7 +24,6 @@ RUN apt-get install -y \
   pkg-config
 
 ### Build CPU Miner from scource code
-RUN git config --global http.sslVerify false
 RUN git clone https://github.com/JayDDee/cpuminer-opt && \
   cd cpuminer-opt && \
   git checkout "$VERSION_TAG" && \
