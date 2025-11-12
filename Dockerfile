@@ -39,7 +39,10 @@ RUN cpuminer --cputest && \
 cpuminer --version
 
 ### Entrypoint Setup
-WORKDIR /cpuminer
-COPY config.json /cpuminer
-EXPOSE 80
-CMD ["cpuminer", "--config=config.json"]
+#WORKDIR /cpuminer
+#COPY config.json /cpuminer
+#EXPOSE 80
+#CMD ["cpuminer", "--config=config.json"]
+
+ENTRYPOINT ["./cpuminer"]
+CMD ["-h"]
