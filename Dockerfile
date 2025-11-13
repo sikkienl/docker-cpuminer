@@ -53,8 +53,13 @@ RUN cd cpuminer \
 # Entrypoint Setup
 WORKDIR /cpuminer
 COPY config.json /cpuminer
-EXPOSE 80
-CMD ["cpuminer", "--config=config.json"]
+#EXPOSE 80
+#CMD ["cpuminer", "--config=config.json"]
 
 #ENTRYPOINT ["./cpuminer"]
 #CMD ["-h"]
+
+ADD mine.sh /mine.sh
+RUN chmod u+x /mine.sh
+
+CMD "/mine.sh"
