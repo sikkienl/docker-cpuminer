@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  
+  cpuminer:
+    image: sikkienl/cpuminer
+    container_name: cpuminer
+    environment:
+      - HOSTNAME=cpuminer
+
+      - ALGORITHM=neoscrypt
+      - HOST=pool.neobytes.network:3010
+      - THREADS=4
+      - USER=NQ6Mi4my7vFVTXvhicVSNF2MSRqPdwYAvH.worker1
+      - PASS=x
+    restart: always
