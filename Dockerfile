@@ -36,8 +36,8 @@ RUN cd cpuminer-opt \
   && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
   && make install -j 4
 
-### Entrypoint Setup
-#WORKDIR /cpuminer
+# Entrypoint Setup
+WORKDIR /cpuminer-opt
 #COPY config.json /cpuminer
 #EXPOSE 80
 #CMD ["cpuminer", "--config=config.json"]
