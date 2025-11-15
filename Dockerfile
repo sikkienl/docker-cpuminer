@@ -46,10 +46,10 @@ RUN set -x \
     libjansson4 \
     zlib1g
 
-# WORKDIR /cpuminer
+WORKDIR /cpuminer
 
-#COPY --from=builder /buildbase/cpuminer-opt/cpuminer ./cpuminer
-COPY --from=builder /buildbase/cpuminer-opt .
+COPY --from=builder /buildbase/cpuminer-opt/cpuminer ./cpuminer
+#COPY --from=builder /buildbase/cpuminer-opt .
 
 LABEL \
   author="SikkieNL (@sikkienl)" \
@@ -62,4 +62,5 @@ ENV PASS=""
 ENV NB_THREADS=1
 
 #ENTRYPOINT /cpuminer --algo=${ALGOLITHM} --url=${POOL} --user=${USER} --threads=${NB_THREADS} --pass=${PASS}
-ENTRYPOINT /cpuminer -a ${ALGOLITHM} -o ${POOL} -u ${USER} -p ${PASS} -t ${NB_THREADS}
+ENTRYPOINT /cpuminer/cpuminer -a ${ALGOLITHM} -o ${POOL} -u ${USER} -p ${PASS} -t ${NB_THREADS}
+#ENTRYPOINT /cpuminer -a ${ALGOLITHM} -o ${POOL} -u ${USER} -p ${PASS} -t ${NB_THREADS}
