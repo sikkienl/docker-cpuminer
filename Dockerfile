@@ -33,7 +33,7 @@ RUN set -x \
   && make install -j 4
 
 # App
-FROM ubuntu:22.04 as RELEASE
+FROM ubuntu:22.04 as release
 
 RUN set -x \
   && apt-get update \
@@ -46,7 +46,7 @@ RUN set -x \
 
 WORKDIR /cpuminer
 
-COPY --from=BUILD /buildbase/cpuminer/cpuminer ./cpuminer
+COPY --from=builder /buildbase/cpuminer/cpuminer ./cpuminer
 
 LABEL \
   author="SikkieNL (@sikkienl)" \
