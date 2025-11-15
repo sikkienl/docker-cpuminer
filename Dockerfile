@@ -1,5 +1,6 @@
 # stage: builder
 FROM ubuntu:22.04 as builder
+ARG VERSION_TAG=v25.6
 
 # Install Dependencies
 RUN set -x \
@@ -18,15 +19,13 @@ RUN set -x \
   && rm -rf /var/lib/apt/lists/*
 
 # Download CPUMiner from scource
-ARG VERSION_TAG=v25.6
-WORKDIR /buildbase
 
+WORKDIR /buildbase
 RUN set -x \
-  && git clone https://github.com/JayDDee/cpuminer-opt /cpuminer
+  && git clone https://github.com/JayDDee/cpuminer-opt -b ${VERSION_TAG} /cpuminer
 
 # Build cpuminer
 WORKDIR /buildbase/cpuminer
-RUN git checkout tags/${VERSION_TAG} -b build-${VERSION_TAG}
 RUN ./autogen.sh \
   && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
   && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
