@@ -36,3 +36,4 @@ WORKDIR /cpuminer
 #EXPOSE 4048
 #CMD ["cpuminer", "--config=config.json"]
 ENTRYPOINT	["./cpuminer"]
+CMD ["-h"]
