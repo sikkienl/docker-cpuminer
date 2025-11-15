@@ -26,10 +26,11 @@ RUN apt-get install -y \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Download CPUMiner from scource
-RUN git clone https://github.com/JayDDee/cpuminer-opt /cpuminer
+WORKDIR /tmp
+RUN git clone https://github.com/JayDDee/cpuminer-opt
 
 # Build cpuminer
-RUN cd cpuminer \
+RUN cd cpuminer-opt \
   && git checkout "$VERSION_TAG" \
   && ./autogen.sh \
   && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
@@ -53,13 +54,13 @@ RUN cd cpuminer \
 # Entrypoint Setup
 WORKDIR /cpuminer
 COPY config.json /cpuminer
-#EXPOSE 80
-#CMD ["cpuminer", "--config=config.json"]
+EXPOSE 80
+CMD ["cpuminer", "--config=config.json"]
 
 #ENTRYPOINT ["./cpuminer"]
 #CMD ["-h"]
 
-ADD mine.sh /mine.sh
-RUN chmod u+x /mine.sh
+#ADD mine.sh /mine.sh
+#RUN chmod u+x /mine.sh
 
-CMD "/mine.sh"
+#CMD "/mine.sh"
