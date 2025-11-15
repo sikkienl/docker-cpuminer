@@ -22,11 +22,11 @@ ARG VERSION_TAG=v25.6
 WORKDIR /buildbase
 
 RUN set -x \
-  && git clone https://github.com/JayDDee/cpuminer-opt /cpuminer \
-  && git checkout "$VERSION_TAG"
+  && git clone https://github.com/JayDDee/cpuminer-opt /cpuminer
 
 # Build cpuminer
 WORKDIR /buildbase/cpuminer
+RUN git checkout tags/${VERSION_TAG} -b build-${VERSION_TAG}
 RUN ./autogen.sh \
   && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
   && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
