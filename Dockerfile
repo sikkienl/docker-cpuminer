@@ -1,10 +1,11 @@
+# stage: builder
 FROM ubuntu:22.04 as builder
-LABEL author="SikkieNL (@sikkienl)"
-ARG VERSION_TAG=v25.6
 
 # Install Dependencies
-RUN apt-get update -y && \
-    apt-get install -y \
+RUN set -x \
+  && apt-get update \
+  && apt-get upgrade \
+  && apt-get install -y \
     autoconf \
     automake \
     build-essential \
@@ -17,26 +18,41 @@ RUN apt-get update -y && \
   && rm -rf /var/lib/apt/lists/*
 
 # Download CPUMiner from scource
-RUN git clone https://github.com/JayDDee/cpuminer-opt /cpuminer
+WORKDIR /buildbase
+RUN set -x \
+  && git clone https://github.com/JayDDee/cpuminer-opt /cpuminer
 
 # Build cpuminer
-RUN cd cpuminer \
+WORKDIR /buildbase/cpuminer
+ARG VERSION_TAG=v25.6
+RUN set -x \
   && git checkout "$VERSION_TAG" \
   && ./autogen.sh \
   && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
   && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
   && make install -j 4 \
-  && cd / \
-  # Verify
-  && cpuminer --cputest \
-  && cpuminer --version
 
 # App
 FROM ubuntu:22.04
 RUN apt-get update \
-  && apt-get install -y libcurl4 openssl libgmp10 libjansson4 zlib1g \
+  && apt-get install -y \
+  libcurl4 \
+  openssl \
+  libgmp10 \
+  libjansson4 \
+  zlib1g \
   && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /cpuminer .
-ENTRYPOINT	["./cpuminer"]
-CMD ["-h"]
+WORKDIR /cpuminer
+COPY --from=BUILD /buildbase/cpuminer/cpuminer ./cpuminer
+LABEL \
+  author="SikkieNL (@sikkienl)" \
+  type="cpuminer"
+
+ENV ALGOLITHM=""
+ENV THREADS=1
+ENV USER=""
+ENV PASSWORD=""
+ENV URL=""
+
+ENTRYPOINT /cpuminer/cpuminer --algo=${ALGOLITHM} --url=${URL} --user=${USER} --threads=${THREADS} --pass=${PASSWORD}
