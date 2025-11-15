@@ -59,4 +59,4 @@ ENV USER=""
 ENV PWD=""
 ENV URL=""
 
-ENTRYPOINT /cpuminer/cpuminer -a=${ALGO} -0=${URL} -u=${USER} -t=${THREADS} -p=${PWD}
+ENTRYPOINT /cpuminer/cpuminer -a ${ALGO} -o ${URL} -u ${USER} -t ${THREADS} -p ${PWD}
