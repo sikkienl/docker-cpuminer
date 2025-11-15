@@ -39,6 +39,7 @@ FROM ubuntu:22.04 as release
 RUN set -x \
   && apt-get update \
   && apt-get install -y \
+    build-essential \
     libcurl4 \
     openssl \
     libgmp10 \
@@ -53,11 +54,13 @@ LABEL \
   author="SikkieNL (@sikkienl)" \
   type="cpuminer"
 
-ENV ALGOLITHM=""
-ENV THREADS=1
-ENV USER=""
-ENV PASSWORD=""
-ENV URL=""
+#ENV ALGOLITHM=""
+#ENV THREADS=1
+#ENV USER=""
+#ENV PASSWORD=""
+#ENV URL=""
 
-ENTRYPOINT /cpuminer/cpuminer --algo=${ALGOLITHM} --url=${URL} --user=${USER} --threads=${THREADS} --pass=${PASSWORD}
+#ENTRYPOINT /cpuminer/cpuminer --algo=${ALGOLITHM} --url=${URL} --user=${USER} --threads=${THREADS} --pass=${PASSWORD}
 
+ENTRYPOINT ["./cpuminer/cpuminer"]
+CMD ["-h"]
