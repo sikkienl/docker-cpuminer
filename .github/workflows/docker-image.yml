@@ -29,6 +29,6 @@ jobs:
 
       - name: Run Docker build ${{ env.NAME }}:latest
         run: |
-          docker buildx build \
+          docker buildx build --no-cache \
           --tag ${{ env.IMAGE_NAME }}:latest \
           --output "type=registry" .
