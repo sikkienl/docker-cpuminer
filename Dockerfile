@@ -25,8 +25,9 @@ RUN set -x \
 WORKDIR /buildbase/cpuminer-opt
 RUN set -x \
     && bash -x ./autogen.sh \
-    && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
-    && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
+    #&& extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
+    #&& CFLAGS="-O3 -march=native -Wall" 
+    && ./configure --with-curl  \
     && make
 
 # App
