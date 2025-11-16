@@ -20,7 +20,7 @@ RUN set -x \
 WORKDIR /buildbase
 RUN set -x \
     #&& git clone https://github.com/JayDDee/cpuminer-opt -b v25.6
-    && git clone https://github.com/tpruvot/cpuminer-multi.git -b linux cpuminer
+    && git clone https://github.com/tpruvot/cpuminer-multi.git -b v1.3-multi cpuminer
 
 # Build cpuminer
 WORKDIR /buildbase/cpuminer
