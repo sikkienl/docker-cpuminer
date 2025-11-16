@@ -1,6 +1,5 @@
 # stage: builder
-FROM alpine
-    as builder
+FROM alpine:latest as builder
 
 # Install Dependencies
 
@@ -38,7 +37,7 @@ RUN set -x \
     && make install
 
 # App
-FROM alpine
+FROM alpine:latest
 
 RUN set -x \
     && apk --update --no-cache add \
