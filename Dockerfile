@@ -1,22 +1,29 @@
 # stage: builder
-FROM alpine:3.17.0 as builder
+FROM alpine
+    as builder
 
 # Install Dependencies
+
+# Runtime dependencies.
 RUN set -x \
-    && apk --update --no-cache add \
-    build-base \
-    git \
+    && apk add --no-cache \
     libcurl \
-    curl-dev \
-    jansson-dev \
-    bash \
+    libgcc \
+    libstdc++ \
+    openssl
+
+# Build dependencies.   
+RUN set -x \
+    && apk add --no-cache .build-deps \
     autoconf \
-    openssl-dev \
-    make \
-    automake
+    automake \
+    build-base \
+    curl \
+    curl-dev \
+    git \
+    openssl-dev
 
 # Download CPUMiner from scource
-
 WORKDIR /buildbase
 RUN set -x \
     #&& git clone https://github.com/JayDDee/cpuminer-opt -b v25.6
@@ -27,12 +34,11 @@ WORKDIR /buildbase/cpuminer
 RUN set -x \
     && bash -x ./autogen.sh \
     #&& extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
-    #&& CFLAGS="-O3 -march=native -Wall" 
-    && ./configure --with-curl  \
-    && make
+    && ./configure CFLAGS="-O2 -march=native " --with-crypto --with-curl  \
+    && make install
 
 # App
-FROM alpine:3.17.0
+FROM alpine
 
 RUN set -x \
     && apk --update --no-cache add \
