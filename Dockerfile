@@ -2,25 +2,18 @@
 FROM alpine:3.17.0 as builder
 
 # Install Dependencies
-
-# Runtime dependencies.
 RUN set -x \
-    && apk add --no-cache \
-    libcurl \
-    libgcc \
-    libstdc++ \
-    openssl
-
-# Build dependencies.   
-RUN set -x \
-    && apk add --no-cache .build-deps \
-    autoconf \
-    automake \
+    && apk --update --no-cache add \
     build-base \
-    curl \
-    curl-dev \
     git \
-    openssl-dev
+    libcurl \
+    curl-dev \
+    jansson-dev \
+    bash \
+    autoconf \
+    openssl-dev \
+    make \
+    automake
 
 # Download CPUMiner from scource
 WORKDIR /buildbase
