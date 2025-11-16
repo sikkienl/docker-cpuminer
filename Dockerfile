@@ -1,46 +1,55 @@
 # stage: builder
-FROM alpine:3.17.0 as builder
+FROM ubuntu:bionic as builder
 
 # Install Dependencies
 RUN set -x \
-    && apk --update --no-cache add \
-    build-base \
-    git \
-    libcurl \
-    curl-dev \
-    jansson-dev \
-    bash \
+  && apt-get update \
+  && apt-get upgrade \
+  && apt-get install -y \
     autoconf \
-    openssl-dev \
-    make \
     automake \
+    build-essential \
+    git \
+    libcurl4-openssl-dev \
+    libgmp-dev \
+    libjansson-dev \
+    libssl-dev \
+    zlib1g-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 # Download CPUMiner from scource
-&& git clone https://github.com/JayDDee/cpuminer-opt -b v25.6 /cpuminer \
-#&& git clone https://github.com/tpruvot/cpuminer-multi.git -b v1.3-multi cpuminer \
+
+WORKDIR /buildbase
+RUN set -x \
+  && git clone https://github.com/JayDDee/cpuminer-opt -b v25.6
 
 # Build cpuminer
-&& cd /cpuminer \
-&& ./autogen.sh \
-&& extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
-&& CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
-&& make install -j 4
+WORKDIR /buildbase/cpuminer-opt
+RUN set -x \
+# RUN ./autogen.sh \
+  && bash -x ./autogen.sh \
+  && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
+  && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
+  && make install -j 4
 
 # App
-FROM alpine:3.17.0
+FROM ubuntu:bionic
 
 RUN set -x \
-    && apk --update --no-cache add \
-    libcurl \
-    libgcc \
-    libstdc++ \
-    jansson \
-    openssl
+  && apt-get update \
+  && apt-get install -y \
+    build-essential \
+    libcurl4 \
+    openssl \
+    libgmp10 \
+    libjansson4 \
+    zlib1g \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /cpuminer
 
 #COPY --from=builder /buildbase/cpuminer-opt/cpuminer ./cpuminer
-COPY --from=builder /buildbase/cpuminer .
+COPY --from=builder /buildbase/cpuminer-opt .
 
 LABEL \
   author="SikkieNL (@sikkienl)" \
