@@ -1,5 +1,5 @@
 # stage: builder
-FROM ubuntu:bionic
+FROM debian:trixie-slim
 
 RUN set -x \
   # Update OS
