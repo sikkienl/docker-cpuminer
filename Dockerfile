@@ -1,51 +1,44 @@
 # stage: builder
-FROM ubuntu:22.04 as builder
-# ARG VERSION_TAG=v25.6
+FROM alpine:3.17.0 as builder
 
 # Install Dependencies
 RUN set -x \
-  && apt-get update \
-  && apt-get upgrade \
-  && apt-get install -y \
-    autoconf \
-    automake \
-    build-essential \
+    && apk --update --no-cache add \
+    build-base \
     git \
-    libcurl4-openssl-dev \
-    libgmp-dev \
-    libjansson-dev \
-    libssl-dev \
-    zlib1g-dev \
-  && rm -rf /var/lib/apt/lists/*
+    libcurl \
+    curl-dev \
+    jansson-dev \
+    bash \
+    autoconf \
+    openssl-dev \
+    make \
+    automake
 
 # Download CPUMiner from scource
 
 WORKDIR /buildbase
 RUN set -x \
-  && git clone https://github.com/JayDDee/cpuminer-opt -b v25.6
+    && git clone https://github.com/JayDDee/cpuminer-opt -b v25.6
 
 # Build cpuminer
 WORKDIR /buildbase/cpuminer-opt
 RUN set -x \
-# RUN ./autogen.sh \
-  && bash -x ./autogen.sh \
-  && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
-  && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
-  && make install -j 4
+    && bash -x ./autogen.sh \
+    && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
+    && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
+    && make install -j 4
 
 # App
-FROM ubuntu:22.04
+FROM alpine:3.17.0
 
 RUN set -x \
-  && apt-get update \
-  && apt-get install -y \
-    build-essential \
-    libcurl4 \
-    openssl \
-    libgmp10 \
-    libjansson4 \
-    zlib1g \
-  && rm -rf /var/lib/apt/lists/*
+    && apk --update --no-cache add \
+    libcurl \
+    libgcc \
+    libstdc++ \
+    jansson \
+    openssl
 
 WORKDIR /cpuminer
 
