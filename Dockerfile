@@ -44,7 +44,8 @@ RUN set -x \
     openssl \
     libgmp10 \
     libjansson4 \
-    zlib1g
+    zlib1g \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /cpuminer
 
@@ -54,19 +55,6 @@ COPY --from=builder /buildbase/cpuminer-opt .
 LABEL \
   author="SikkieNL (@sikkienl)" \
   type="cpuminer"
-
-#ENV ALGOLITHM=""
-#ENV POOL=""
-#ENV USER=""
-#ENV PASS=""
-#ENV NB_THREADS=1
-
-#ENTRYPOINT /cpuminer --algo=${ALGOLITHM} --url=${POOL} --user=${USER} --threads=${NB_THREADS} --pass=${PASS}
-#ENTRYPOINT /cpuminer/cpuminer -a ${ALGOLITHM} -o ${POOL} -u ${USER} -p ${PASS} -t ${NB_THREADS}
-#ENTRYPOINT /cpuminer -a ${ALGOLITHM} -o ${POOL} -u ${USER} -p ${PASS} -t ${NB_THREADS}
-
-#ENTRYPOINT ["./cpuminer"]
-#CMD ["-h"]
 
 COPY startup.sh .
 ENTRYPOINT [ "bash", "startup.sh" ]
