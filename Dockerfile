@@ -1,21 +1,29 @@
 # stage: builder
 FROM ubuntu:bionic as builder
 
-# Install Dependencies
+# Update OS
 RUN set -x \
   && apt-get update \
-  && apt-get upgrade \
+  && apt-get upgrade
+
+# Install Dependencies
+RUN set -x \
   && apt-get install -y \
     autoconf \
     automake \
     build-essential \
+    curl \
+    g++ \
     git \
     libcurl4-openssl-dev \
     libgmp-dev \
     libjansson-dev \
     libssl-dev \
-    zlib1g-dev \
-  && rm -rf /var/lib/apt/lists/*
+    libz-dev \
+    make \
+    pkg-config \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Download CPUMiner from scource
 
