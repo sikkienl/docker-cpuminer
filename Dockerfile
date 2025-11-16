@@ -51,9 +51,6 @@ RUN set -x \
   && cpuminer --cputest \
   && cpuminer --version 
 
-  #COPY --from=builder /buildbase/cpuminer-opt/cpuminer ./cpuminer
-COPY --from=builder /buildbase/cpuminer-opt .
-
 LABEL \
   author="SikkieNL (@sikkienl)" \
   type="cpuminer"
