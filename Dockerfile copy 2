@@ -1,5 +1,5 @@
 # stage: builder
-FROM ubuntu:bionic
+FROM ubuntu:bionic as builder
 
 RUN set -x \
   # Update OS
@@ -21,34 +21,40 @@ RUN set -x \
     libz-dev \
     make \
     pkg-config \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Download CPUMiner from scource
-  && git clone https://github.com/JayDDee/cpuminer-opt -b v25.6 /cpuminer \
+WORKDIR /buildbase
+RUN set -x \
+  && git clone https://github.com/JayDDee/cpuminer-opt -b v25.6
 
 # Build cpuminer
-  && cd /cpuminer \
-  && ./autogen.sh \
+WORKDIR /buildbase/cpuminer-opt
+RUN set -x \
+  && bash -x ./autogen.sh \
   && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
   && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
-  && make install -j 4 \
+  && make install -j 4
 
-# Clean-up
-  && apt-get remove -y \
-    autoconf \
-    automake \
+# App
+FROM ubuntu:bionic
+
+RUN set -x \
+  && apt-get update \
+  && apt-get install -y \
     build-essential \
-    curl \
-    g++ \
-    git \
-    make \
-    pkg-config \
-  && apt-get autoremove -y \
-  && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/* \
+    libcurl4 \
+    openssl \
+    libgmp10 \
+    libjansson4 \
+    zlib1g \
+  && rm -rf /var/lib/apt/lists/*
 
-# Verify
-  && cpuminer --cputest \
-  && cpuminer --version 
+WORKDIR /cpuminer
+
+#COPY --from=builder /buildbase/cpuminer-opt/cpuminer ./cpuminer
+COPY --from=builder /buildbase/cpuminer-opt .
 
 LABEL \
   author="SikkieNL (@sikkienl)" \
