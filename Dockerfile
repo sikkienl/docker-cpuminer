@@ -1,58 +1,51 @@
 # stage: builder
-FROM debian:trixie-slim
+FROM alpine:3.17.0 as builder
 
 RUN set -x \
-  # Update OS
-  && apt-get update \
-  && apt-get upgrade -y \
-
-  # Build dependencies.
-  && apt-get install -y \
-    autoconf \
-    automake \
-    build-essential \
-    curl \
-    g++ \
-    git \
-    libcurl4-openssl-dev \
-    libgmp-dev \
-    libjansson-dev \
-    libssl-dev \
-    libz-dev \
-    make \
-    pkg-config \
+    && apk --update --no-cache add \
+      build-base \
+      git \
+      libcurl \
+      curl-dev \
+      jansson-dev \
+      bash \
+      autoconf \
+      openssl-dev \
+      make \
+      automake
 
 # Download CPUMiner from scource
-  && git clone https://github.com/JayDDee/cpuminer-opt -b v25.6 /cpuminer \
+WORKDIR /buildbase
+RUN set -x \
+    && git clone https://github.com/tpruvot/cpuminer-multi.git -b v1.3-multi cpuminer
 
 # Build cpuminer
-  && cd /cpuminer \
-  && ./autogen.sh \
-  && extracflags="$extracflags -Ofast -flto -fuse-linker-plugin -ftree-loop-if-convert-stores" \
-  && CFLAGS="-O3 -march=native -Wall" ./configure --with-curl  \
-  && make install -j 4 \
+WORKDIR /buildbase/cpuminer
+RUN set -x \
+    && bash -x ./autogen.sh \
+    # && ./configure CFLAGS="*-march=native*" --with-crypto --with-curl \
+    && ./configure --with-crypto --with-curl \
+    && make
 
-# Clean-up
-  && apt-get remove -y \
-    autoconf \
-    automake \
-    build-essential \
-    curl \
-    g++ \
-    git \
-    make \
-    pkg-config \
-  && apt-get autoremove -y \
-  && apt-get clean -y \
-  && rm -rf /var/lib/apt/lists/* \
+# stage: release
+FROM alpine:3.17.0 as RELEASE
 
-# Verify
-  && cpuminer --cputest \
-  && cpuminer --version 
+RUN set -x \
+    && apk --update --no-cache add \
+    libcurl \
+    libgcc \
+    libstdc++ \
+    jansson \
+    openssl
+
+WORKDIR /cpuminer
+
+COPY --from=BUILD /buildbase/cpuminer/cpuminer ./cpuminer
 
 LABEL \
   author="SikkieNL (@sikkienl)" \
-  type="cpuminer"
+  type="cpuminer" \
+  miner="cpuminer-multi"
 
 COPY startup.sh .
 ENTRYPOINT [ "bash", "startup.sh" ]
