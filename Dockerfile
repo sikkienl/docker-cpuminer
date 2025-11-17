@@ -40,7 +40,7 @@ RUN set -x \
 
 WORKDIR /cpuminer
 
-COPY --from=BUILD /buildbase/cpuminer/cpuminer ./cpuminer
+COPY --from=builder /buildbase/cpuminer/cpuminer ./cpuminer
 
 LABEL \
   author="SikkieNL (@sikkienl)" \
